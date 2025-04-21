@@ -1,0 +1,28 @@
+
+
+.HtmlViewer h1{
+    font-size:xx-large;
+}
+
+.HtmlViewer h2{
+    font-size: x-large;
+}
+
+.HtmlViewer h3{
+    font-size: large;
+    font-weight: 500;
+}
+
+.HtmlViewer ol{
+    list-style:decimal;
+    padding-left: 40px;
+}
+
+.HtmlViewer ul{
+    list-style-type:disc;
+    padding-left: 40px;
+}
+
+.HtmlViewer p{
+    font-size: 18px;
+}
