@@ -4,15 +4,16 @@ import * as cheerio from 'cheerio';
 import jwt from "jsonwebtoken"
 
 
-let $: any
+
 export async function POST(req: Request) {
     try {
+        let cookieStore = await cookies()
         let { indexfileAPIData, blogsFoldExist } = await req.json()
         const indexresp = await fetch(`${indexfileAPIData[0].git_url}`)
+        const indexfiledecoded = await indexresp.json()
+        let indexfileAPIDatahtml = atob(indexfiledecoded.content)
+        let $ = cheerio.load(indexfileAPIDatahtml)
         if (indexresp.ok && blogsFoldExist.length == 0) {
-            const indexfiledecoded = await indexresp.json()
-            indexfileAPIData = atob(indexfiledecoded.content)
-            $ = cheerio.load(indexfileAPIData)
             if ($('nav ul li').length) {
                 return NextResponse.json({ message: "Happy Blogging" }, { status: 200 })
             }
@@ -21,6 +22,18 @@ export async function POST(req: Request) {
             }
         }
         else {
+            console.log($, ">>>>>>>>>>>>>>>>>>>>")
+            let scripttag = $('script')
+            let GAT = ''
+            scripttag.each((i: any, el: any) => {
+                if ($.html(el).includes('googletagmanager.com/gtag/js') || $.html(el).includes('gtag(')) {
+                    GAT += $.html(el)
+                }
+            })
+            if (GAT != "") {
+                cookieStore.set("GAT", GAT)
+            }
+            cookieStore.set("selectedRepo", indexfileAPIData[0].url.split("/index.html")[0])
             return NextResponse.json({ message: "Blogs Folder Already Exist" }, { status: 200 })
         }
     }
@@ -34,6 +47,10 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
     try {
         let { indexfileAPIData, blogsFoldExist } = await req.json()
+        const indexresp = await fetch(`${indexfileAPIData[0].git_url}`)
+        const indexfiledecoded = await indexresp.json()
+        let indexfileAPIDatahtml = atob(indexfiledecoded.content)
+        const $ = cheerio.load(indexfileAPIDatahtml)
         const cookieStore = await cookies()
         let access_code = cookieStore.get('UI')?.value || ""
         const blog_li = $('nav ul li').first().clone()
@@ -47,7 +64,6 @@ export async function PUT(req: Request) {
         if (GAT != "") {
             cookieStore.set("GAT", GAT)
         }
-        console.log($.html(), "Raghav")
         const blogItem = $('nav ul li').filter((i, el) => {
             return $(el).text().trim().toLowerCase() === 'blogs';
         });
@@ -57,7 +73,7 @@ export async function PUT(req: Request) {
         const url = new URL(indexfileAPIData[0].url)
         url.searchParams.delete('ref')
         jwt.decode(access_code)
-        
+
         cookieStore.set("selectedRepo", indexfileAPIData[0].url.split("/index.html")[0])
 
         if (blogItem.html() == null && blogsFoldExist.length == 0) {
@@ -83,7 +99,7 @@ export async function PUT(req: Request) {
         }
     } catch (error) {
         console.error("An error occured", error)
-        return NextResponse.json({ Message: "Error Occured while Updating Index.html File" })
+        return NextResponse.json({ Message: "Error Occured while Updating Index.html File" }, { status: 400 })
     }
 }
 

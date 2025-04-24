@@ -10,10 +10,10 @@ export default function UserNav() {
                 </div>
                 <ul className="list-none mx-1">
                     <li className="text-lime-50 pl-5 py-4 text-xl mb-1"><Link href={"/user/dashboard"}>Dashboard</Link></li>
-                    <li className="text-lime-50 pl-5 py-4 text-xl mb-1"><Link href={"/user/userhome"}>Add new folder</Link></li>
+                    {/* <li className="text-lime-50 pl-5 py-4 text-xl mb-1"><Link href={"/user/userhome"}>Add new folder</Link></li> */}
                     <li className="text-lime-50 pl-5 py-4 text-xl mb-1"><Link href={"/user/newblogname"}>Add new blog</Link></li>
-                    <li className="text-lime-50 pl-5 py-4 text-xl mb-1">Added blogs</li>
-                    <li className="text-lime-50 pl-5 py-4 text-xl mb-1">Logout</li>
+                    {/* <li className="text-lime-50 pl-5 py-4 text-xl mb-1">Added blogs</li> */}
+                    {/* <li className="text-lime-50 pl-5 py-4 text-xl mb-1">Logout</li> */}
                     {/* <li className="text-lime-50 pl-5 py-4 w-95 text-xl mb-1">ADD NEW FOLDER</li> */}
                 </ul>
             </div>

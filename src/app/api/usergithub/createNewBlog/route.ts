@@ -9,6 +9,8 @@ export async function PUT(req: Request) {
         const cookieStore = await cookies()
         const repoUrl = cookieStore.get("selectedRepo")?.value
         const access_token = jwt.decode(`${cookieStore.get("UI")?.value}`)?.access_token
+
+        console.log(repoUrl , "Ra..................")
         let data = await fetch(`${repoUrl}/Blogs`)
         if (data.ok) {
             const allBlogs = await data.json()

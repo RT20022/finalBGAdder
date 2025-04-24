@@ -6,6 +6,7 @@ import "./blog.css";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { useParams } from "next/navigation";
+import { ClipLoader } from "react-spinners";
 import Metatagsadder from "@/app/UI/MetaTagsAdder/metatagsadder";
 
 export default function PAGE() {
@@ -17,6 +18,7 @@ export default function PAGE() {
     const [getContent, setContent] = useState<string>("");
     const [buttonenable, setbuttonenable] = useState<boolean>(false)
     const [modalViewable, setmodalviewable] = useState<boolean>(false)
+    const [submit,isSubmit] = useState<boolean>(false)
     interface formd {
         blogtitle: string,
         blogtags: string,
@@ -36,14 +38,14 @@ export default function PAGE() {
     }
 
    async function handleSubmit(e: any) {
+        isSubmit(true)
         e.preventDefault()
-        console.log(data)
-        console.log(data,"Raghav")
         const resp = await fetch("/api/usergithub/addnewblog", {
             method: "PUT",
             body: JSON.stringify({ slug: slug, getContent: getContent, meta_title: data})
         })
         toast.success(`Blog Added ${slug}`)
+        window.location.href = "/user/dashboard"
     }
 
 
@@ -107,20 +109,30 @@ export default function PAGE() {
                 </div>
             </div>
 
-            {buttonenable && <button className="bg-blue-600 p-2 text-xl rounded-3xl fixed text-purple-50 bottom-20 right-20 shadow-xl" onClick={handleClick}>Add Blog</button>}
+            {buttonenable && <button className="bg-blue-600 p-2 text-xl rounded-3xl fixed text-purple-50 bottom-20 right-20 shadow-xl hover:cursor-pointer" onClick={handleClick}>Add Blog</button>}
 
 
 
             {modalViewable && <div className="h-[100vh] w-[100%] bg-[rgba(107,107,107,0.6727065826330532)] absolute top-0 flex justify-center items-center">
                 <div className="bg-blue-500  w-[30vw] rounded-3xl shadow-lg p-10">
-                    <div className="flex justify-end"><button className="bg-amber-50 text-xl px-3 py-1  rounded-full shadow" onClick={() => setmodalviewable(false)}>X</button></div>
+                    <div className="flex justify-end"><button className="bg-amber-50 text-xl px-3 py-1  rounded-full shadow hover:cursor-pointer" onClick={() => setmodalviewable(false)}>X</button></div>
                     <form onSubmit={(e) => { handleSubmit(e) }} className="flex flex-col justify-center items-center mt-10">
                         <input type="text" className="border text-xl w-[100%] rounded-3xl px-5 py-1" placeholder="Enter Blog title" required name="blogtitle" value={data.blogtitle} onChange={(event) => { handlechange(event) }} />
                         <input type="text" className="border text-xl w-[100%] rounded-3xl px-5 py-1 mt-7" placeholder="Enter tags" required name="blogtags" value={data.blogtags} onChange={(event) => { handlechange(event) }} />
                         <p><b>Note :</b>Use , (coma) to seperate the tags.</p>
                         <input type="text" className="border text-xl w-[100%] rounded-3xl px-5 py-1 mt-5" placeholder="Enter Description" name="blogdesc" value={data.blogdesc} onChange={(event) => { handlechange(event) }} required />
                         <p><b>Note :</b> Description should be 120-158 characters</p>
-                        <button className="bg-amber-50 text-xl mt-5 rounded-full px-3 py-2 shadow" type="submit">Submit</button>
+                        {submit ? <ClipLoader
+                        color={"black"}
+                        // cssOverride={override}
+                        size={30}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                      />  :
+
+                      <button className="bg-amber-50 text-xl mt-5 rounded-full px-3 py-2 shadow hover:cursor-pointer" type="submit">Submit</button>
+                        
+                        }
                     </form>
                 </div>
             </div>}

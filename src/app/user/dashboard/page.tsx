@@ -8,35 +8,51 @@ async function GetData() {
     let repoUrl = (await cookieStore).get("selectedRepo")
     try {
         const result = await fetch(`${repoUrl?.value}/Blogs`)
+        const dataObj = {}
         let noOfBlogs = 0
-        let resultArray = []
+        let allBlogArray = []
 
         const resp = await result.json()
         resp.forEach(element => {
-            if (element.name != "blogs.html") {
+            if (element.name != "blogs.html" && element.name != "style.css") {
                 noOfBlogs += 1
+                allBlogArray.push(element.name)
             }
         });
+
+        dataObj.noOfBlogs =noOfBlogs
+        dataObj.allBlogArray = allBlogArray
+
+        console.log(noOfBlogs, dataObj , allBlogArray)
+
+        return dataObj
         
     } catch (error) {
-        console.log(error, "raghav error")
+        console.log(error, "Error Occured in Dashboard Page")
     }
 }
 
-export default function PAGE() {
-    GetData()
+export default async function PAGE() {
+   let allData = await GetData()
     return (
         <>
-            <div>
-                <div className="w-40 bg-red-400 text-3xl ">
-                    <h2>Connected Repo : 1</h2>
-                    <h3>Repo name</h3>
+            <div className="flex">
+                <div className=" text-2xl   p-5 border-violet-700 border-4 border text-center">
+                    <h2>Connected Repo : 1</h2> 
                 </div>
-                <div className="w-40 bg-gray-400 text-3xl ">
-                    {/* <h2>No of Blogs Added : {noOfBlogs}</h2>  */}
+                <div className=" text-2xl p-5 border-4 border text-center ml-5">
+                    <h2>No of Blogs Added : {allData.noOfBlogs}</h2> 
                     <h3></h3>
                 </div>
             </div>
+                <div className=" text-2xl p-5 border-4 border text-center ml-5">
+                    <h2>Blogs Name :- </h2> 
+                    {allData.allBlogArray.map((val)=>{
+                        return (
+                            <h3>{val}</h3>
+                        )
+                    })}
+                </div>
         </>
     )
 }

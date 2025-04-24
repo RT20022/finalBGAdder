@@ -29,8 +29,6 @@ export default function SelectRepo(Props: any) {
                             return val
                         }
                     })
-
-                    
                         const indexFIleResp = await fetch('/api/usergithub', {
                             method: "POST",
                             body: JSON.stringify({ indexfileAPIData: indexFile , blogsFoldExist : blogFolder })
