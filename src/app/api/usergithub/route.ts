@@ -76,12 +76,21 @@ export async function PUT(req: Request) {
 
         cookieStore.set("selectedRepo", indexfileAPIData[0].url.split("/index.html")[0])
 
+        const tokenValue = cookieStore.get("UI")?.value;
+        const decoded = tokenValue ? jwt.decode(tokenValue) as { access_token?: string } | null : null;
+
+        if (!decoded || !decoded.access_token) {
+            throw new Error("Access token is missing or invalid.");
+        }
+
+        const access_token = decoded.access_token;
+
         if (blogItem.html() == null && blogsFoldExist.length == 0) {
             const sendHtmlResp = await fetch(`${url.toString()}`,
                 {
                     method: "PUT",
                     headers: {
-                        "Authorization": `Bearer ${jwt.decode(access_code)?.access_token}`,
+                        "Authorization": `Bearer ${access_token}`,
                         "Accept": "application/json"
                     },
                     body: JSON.stringify({

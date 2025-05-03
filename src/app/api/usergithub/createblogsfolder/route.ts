@@ -7,7 +7,15 @@ export async function PUT() {
     try {
         let cookieStore = await cookies()
         let RepoUrl = cookieStore.get("selectedRepo")?.value
-        let access_token = jwt.decode(`${cookieStore.get('UI')?.value}`).access_token
+        // let access_token = jwt.decode(`${cookieStore.get('UI')?.value}`).access_token
+        const tokenValue = cookieStore.get("UI")?.value;
+        const decoded = tokenValue ? jwt.decode(tokenValue) as { access_token?: string } | null : null;
+
+        if (!decoded || !decoded.access_token) {
+            throw new Error("Access token is missing or invalid.");
+        }
+
+        const access_token = decoded.access_token;
 
         const makefolderesult = await fetch(`${RepoUrl}/Blogs/blogs.html`,
             {
@@ -32,10 +40,10 @@ export async function PUT() {
                 })
             }
         )
-        console.log(makefolderesult.status,await makefolderesult.text())
+        console.log(makefolderesult.status, await makefolderesult.text())
 
         if (makefolderesult.ok) {
-         console.log("done !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")   
+            console.log("done !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         }
 
         return NextResponse.json({ message: "Folder Created and file added successfully" })
@@ -47,27 +55,27 @@ export async function PUT() {
 
 
 
-export async function GET(){
+export async function GET() {
     try {
         let cookieStore = await cookies()
         let RepoUrl = cookieStore.get("selectedRepo")?.value
         let reposResp = await fetch(`${RepoUrl}`)
-        if(reposResp.ok){
-            let allrepos  = await reposResp.json()
-           const isBlogsDirectory = allrepos.filter((val:any)=>{
-                return val.name == "Blogs" 
+        if (reposResp.ok) {
+            let allrepos = await reposResp.json()
+            const isBlogsDirectory = allrepos.filter((val: any) => {
+                return val.name == "Blogs"
             })
-            if(isBlogsDirectory.length == 1){
-                return NextResponse.json({isBlogExist:true})
+            if (isBlogsDirectory.length == 1) {
+                return NextResponse.json({ isBlogExist: true })
             }
-            else{
-                return NextResponse.json({isBlogExist:false})
+            else {
+                return NextResponse.json({ isBlogExist: false })
             }
         }
 
-        return NextResponse.json({Message:"API fetched"})
+        return NextResponse.json({ Message: "API fetched" })
     } catch (error) {
         console.log(error)
-        return NextResponse.json({Message:"An error occured while looking if Blogs Directory Already Exist"})
+        return NextResponse.json({ Message: "An error occured while looking if Blogs Directory Already Exist" })
     }
 }

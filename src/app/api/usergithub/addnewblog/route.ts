@@ -7,7 +7,7 @@ export async function PUT(req: Request) {
     try {
         const { slug, getContent, meta_title } = await req.json()
         const cookieStore = await cookies()
-        const access_token = jwt.decode(cookieStore.get("UI")?.value)?.access_token
+        const access_token = (jwt.decode(cookieStore.get("UI")!.value) as any)?.access_token;
         const giturl = cookieStore.get("selectedRepo")?.value
 
         const perviousData = await fetch(`${giturl}/Blogs/${slug}/${slug}.html`)
@@ -50,7 +50,7 @@ export async function PUT(req: Request) {
                                     </style>`)
 
         
-            let navbar = `<nav style="height: 10vh; background-color: rgb(58, 57, 57); width:100%;">
+            let navbar = `<nav style="height: 10vh; background-color: #5A228C; width:100%;">
         <ul style="display: flex; justify-content: end; align-items: center;">
             <li style="list-style: none; display: flex; justify-content: center;">
                 <a href="/" style="color: white; padding: 3.5vh; text-decoration: none;">Home</a>

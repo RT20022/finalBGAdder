@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { cookies } from "next/headers"
 import jwt from 'jsonwebtoken'
 import SelectRepo from "@/app/UI/githubPagesHelpers/SelectRepo/page"
@@ -12,11 +14,19 @@ async function Getrepos() {
             token_type: "",
             scope: "",
         }
-        let decoded = jwt.decode(UI?.value) || myObj
+        const tokenValue = cookieStore.get("UI")?.value;
+        const decoded = tokenValue ? jwt.decode(tokenValue) as { access_token?: string } | null : null;
+
+        if (!decoded || !decoded.access_token) {
+            throw new Error("Access token is missing or invalid.");
+        }
+
+        const access_token = decoded.access_token;
+        // let decoded = jwt.decode(UI?.value) || myObj
         const resp = await fetch("https://api.github.com/user", {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${decoded.access_token}`,
+                "Authorization": `Bearer ${access_token}`,
                 "Content-Type": "application/json"
             }
         })
@@ -30,7 +40,7 @@ async function Getrepos() {
         }
     } catch (error) {
         console.log(error)
-        return NextResponse.redirect('/error')
+        return NextResponse.json({Message : "An error occured kindly contact the Developer"})
     }
 
 }
@@ -41,7 +51,7 @@ export default async function PAGE() {
     return (
         <>
             <div className="w-[100vw] h-[100vh] bg-gradient-to-b from-slate-100 via-slate-400 to-slate-600 flex justify-center items-center">
-            <SelectRepo repos={repos}></SelectRepo> 
+                <SelectRepo repos={repos}></SelectRepo>
             </div>
         </>
     )

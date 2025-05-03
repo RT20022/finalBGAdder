@@ -24,10 +24,10 @@ export async function middleware(request: NextRequest) {
         }
     }
     else {
-        return NextResponse.redirect(new URL("/Admin", request.url))
+        return NextResponse.redirect(new URL("/", request.url))
     }
 }
 
 export const config = {
-    matcher: ['/', '/user/signup', '/user/userhome'],
+    matcher: [ '/user/signup', '/user/userhome'],
 }

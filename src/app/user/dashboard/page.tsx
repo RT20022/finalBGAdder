@@ -1,58 +1,52 @@
-import { cookies } from "next/headers"
+// app/dashboard/page.tsx
+'use client';
 
+import React from "react";
 
-let repoName = ""
-
-async function GetData() {
-    let cookieStore = cookies();
-    let repoUrl = (await cookieStore).get("selectedRepo")
-    try {
-        const result = await fetch(`${repoUrl?.value}/Blogs`)
-        const dataObj = {}
-        let noOfBlogs = 0
-        let allBlogArray = []
-
-        const resp = await result.json()
-        resp.forEach(element => {
-            if (element.name != "blogs.html" && element.name != "style.css") {
-                noOfBlogs += 1
-                allBlogArray.push(element.name)
-            }
-        });
-
-        dataObj.noOfBlogs =noOfBlogs
-        dataObj.allBlogArray = allBlogArray
-
-        console.log(noOfBlogs, dataObj , allBlogArray)
-
-        return dataObj
-        
-    } catch (error) {
-        console.log(error, "Error Occured in Dashboard Page")
-    }
+interface BlogData {
+  noOfBlogs: number;
+  allBlogArray: string[];
 }
 
-export default async function PAGE() {
-   let allData = await GetData()
-    return (
-        <>
-            <div className="flex">
-                <div className=" text-2xl   p-5 border-violet-700 border-4 border text-center">
-                    <h2>Connected Repo : 1</h2> 
-                </div>
-                <div className=" text-2xl p-5 border-4 border text-center ml-5">
-                    <h2>No of Blogs Added : {allData.noOfBlogs}</h2> 
-                    <h3></h3>
-                </div>
-            </div>
-                <div className=" text-2xl p-5 border-4 border text-center ml-5">
-                    <h2>Blogs Name :- </h2> 
-                    {allData.allBlogArray.map((val)=>{
-                        return (
-                            <h3>{val}</h3>
-                        )
-                    })}
-                </div>
-        </>
-    )
+// Mock data function (Replace with real fetch if not using static export)
+async function GetData(): Promise<BlogData> {
+  // Sample dummy data (Replace this logic if using server features)
+  const noOfBlogs = 3;
+  const allBlogArray = ["blog1.md", "blog2.md", "blog3.md"];
+
+  return {
+    noOfBlogs,
+    allBlogArray,
+  };
+}
+
+export default function Page() {
+  const [data, setData] = React.useState<BlogData>({
+    noOfBlogs: 0,
+    allBlogArray: [],
+  });
+
+  React.useEffect(() => {
+    GetData().then(setData);
+  }, []);
+
+  return (
+    <>
+      <div className="flex">
+        <div className="text-2xl p-5 border-violet-700 border-4 text-center">
+          <h2>Connected Repo : 1</h2>
+        </div>
+        <div className="text-2xl p-5 border-4 text-center ml-5">
+          <h2>No of Blogs Added : {data.noOfBlogs}</h2>
+        </div>
+      </div>
+
+      <div className="text-2xl p-5 border-4 text-center ml-5">
+        <h2>Blogs Name :- </h2>
+        {data.allBlogArray.map((val, key) => (
+          <h3 key={key}>{val}</h3>
+        ))}
+      </div>
+    </>
+  );
 }

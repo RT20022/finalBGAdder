@@ -65,7 +65,7 @@ export default function SelectRepo(Props: any) {
                 true ?
                     <div className="shadow-2xl rounded-xl pb-5">
                         <h1 className="text-2xl m-5 text-white">Choose a repository to start: </h1>
-                        {Props.repos.map((val: any) => {
+                        {Array.isArray(Props.repos) && Props.repos.map((val: any) => {
                             return (
                                 <h1 key={val.id} className="border-t text-lg pl-5 border-gray-300 duration-300 hover:bg-gray-300 hover:text-xl hover:cursor-pointer" onClick={() => { HandleClick(val.url) }}> {val.name}</h1>
                             )

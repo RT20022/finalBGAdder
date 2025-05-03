@@ -8,9 +8,17 @@ export async function PUT(req: Request) {
         const { newBlogName } = await req.json()
         const cookieStore = await cookies()
         const repoUrl = cookieStore.get("selectedRepo")?.value
-        const access_token = jwt.decode(`${cookieStore.get("UI")?.value}`)?.access_token
+        // const access_token = jwt.decode(`${cookieStore.get("UI")?.value}`)?.access_token
+        const tokenValue = cookieStore.get("UI")?.value;
+        const decoded = tokenValue ? jwt.decode(tokenValue) as { access_token?: string } | null : null;
 
-        console.log(repoUrl , "Ra..................")
+        if (!decoded || !decoded.access_token) {
+            throw new Error("Access token is missing or invalid.");
+        }
+
+        const access_token = decoded.access_token;
+
+        console.log(repoUrl, "Ra..................")
         let data = await fetch(`${repoUrl}/Blogs`)
         if (data.ok) {
             const allBlogs = await data.json()
@@ -18,7 +26,7 @@ export async function PUT(req: Request) {
                 return val.name == newBlogName
             })
             if (isSameBlog.length == 1) {
-                return NextResponse.json({ message: "Blog already exist" },{status:302})
+                return NextResponse.json({ message: "Blog already exist" }, { status: 302 })
             }
             else if (isSameBlog.length == 0) {
                 const isCreated = await fetch(`${repoUrl}/Blogs/${newBlogName}/${newBlogName}.html`, {

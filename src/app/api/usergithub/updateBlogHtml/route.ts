@@ -7,7 +7,15 @@ export async function PUT(req: Request) {
     try {
         const { slug, getContent, meta_title } = await req.json()
         const cookieStore = await cookies()
-        const access_token = jwt.decode(cookieStore.get("UI")?.value)?.access_token
+        // const access_token = jwt.decode(cookieStore.get("UI")?.value)?.access_token
+        const tokenValue = cookieStore.get("UI")?.value;
+        const decoded = tokenValue ? jwt.decode(tokenValue) as { access_token?: string } | null : null;
+
+        if (!decoded || !decoded.access_token) {
+            throw new Error("Access token is missing or invalid.");
+        }
+
+        const access_token = decoded.access_token;
         const giturl = cookieStore.get("selectedRepo")?.value
         const blogRoute = await fetch(`${giturl}/Blogs/blogs.html`)
         console.log(giturl, "blogRoute")
@@ -29,7 +37,7 @@ export async function PUT(req: Request) {
         const url2 = new URL(blogRouteData.url)
         url2.searchParams.delete('ref')
 
-        const blogrouteresp = await fetch(`${url.toString()}`,
+        const blogrouteresp = await fetch(`${url2.toString()}`,
             {
                 method: "PUT",
                 headers: {

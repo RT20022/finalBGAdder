@@ -1,7 +1,8 @@
+import { LayoutProps } from "../../../.next/types/app/layout"
 import UserNav from "../UI/UserNav/Usernav"
 
 
-export default function Layout({ children }) {
+export default function Layout({ children }: LayoutProps) {
     return (
         <>
             <div className="flex">
