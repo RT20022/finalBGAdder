@@ -6,7 +6,7 @@ export default function Home() {
     const params = new URLSearchParams({
       client_id: "Ov23lik3YSNDborzdlPW",
       state: "RadhaKrishn",
-      redirect_uri: "http://localhost:3000/api/auth/github",
+      redirect_uri: "https://rkblogadder.vercel.app/api/auth/github",
       scope: "repo user",
     });
     window.location.href = `https://github.com/login/oauth/authorize?${params}`
