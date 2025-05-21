@@ -20,7 +20,7 @@ async function GetData() {
         let allBlogArray : string[] = [];
 
         const resp = await result.json()
-        resp.forEach(element => {
+        resp.forEach(element : any => {
             if (element.name != "blogs.html" && element.name != "blog.css") {
                 noOfBlogs += 1
                 allBlogArray.push(element.name)
