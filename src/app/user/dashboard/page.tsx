@@ -9,10 +9,13 @@ async function GetData() {
     try {
         const result = await fetch(`${repoUrl?.value}/Blogs`)
         interface group {
-            noOfBlogs : string,
+            noOfBlogs : number,
             allBlogArray : Array
         }
-        const dataObj = group:{}
+        const dataObj: Group = {
+  noOfBlogs: 0,
+  allBlogArray: [],
+};
         let noOfBlogs = 0
         let allBlogArray = []
 
