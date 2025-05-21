@@ -19,7 +19,7 @@ export async function GET(req: Request) {
                     client_id: "Ov23lik3YSNDborzdlPW",
                     client_secret: "58a83bb0f3f0843d2964802fce3c467ad0acd8f1",
                     code: searchparam.searchParams.get("code"),
-                    redirect_uri: "http://localhost:3000/api/auth/github"
+                    redirect_uri: "https://rkblogadder.vercel.app/api/auth/github"
                 })
             })
 
