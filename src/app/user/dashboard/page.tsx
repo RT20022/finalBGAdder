@@ -40,7 +40,7 @@ async function GetData() {
 }
 
 export default async function PAGE() {
-   let allData = await GetData()
+   let allData = await GetData() || []
     return (
         <>
             <div className="flex">
