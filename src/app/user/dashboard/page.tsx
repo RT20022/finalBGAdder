@@ -40,8 +40,9 @@ async function GetData() {
 }
 
 export default async function PAGE() {
-   let allData = await GetData() || []
-    return (
+   let allData = await GetData();
+    if(allData){
+        return (
         <>
             <div className="flex">
                 <div className=" text-2xl   p-5 border-violet-700 border-4 border text-center">
@@ -62,5 +63,11 @@ export default async function PAGE() {
                 </div>
         </>
     )
+    }
+    else{
+        return (
+            <>An error Occured while loading the page. Kindly Contact Admin.</>
+        )
+    }
 }
 
