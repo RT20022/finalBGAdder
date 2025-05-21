@@ -8,7 +8,7 @@ async function GetData() {
     let repoUrl = (await cookieStore).get("selectedRepo")
     try {
         const result = await fetch(`${repoUrl?.value}/Blogs`)
-        interface group {
+        interface Group {
             noOfBlogs : number,
             allBlogArray : string[]
         }
