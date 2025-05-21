@@ -7,7 +7,7 @@ async function GetData() {
     let cookieStore = cookies();
     let repoUrl = (await cookieStore).get("selectedRepo")
     try {
-        const result = await fetch(${repoUrl?.value}/Blogs)
+        const result = await fetch(`${repoUrl?.value}/Blogs`)
         interface group {
             noOfBlogs : string,
             allBlogArray : Array
