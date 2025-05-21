@@ -17,7 +17,7 @@ async function GetData() {
   allBlogArray: [],
 };
         let noOfBlogs = 0
-        let allBlogArray = []
+        let allBlogArray : string[] = [];
 
         const resp = await result.json()
         resp.forEach(element => {
