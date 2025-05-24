@@ -44,22 +44,24 @@ export default async function PAGE() {
   if (allData) {
     return (
       <>
-        <div className="flex">
-          <div className=" text-2xl   p-5 border-violet-700 border-4 border text-center">
-            <h2>Connected Repo : 1</h2>
+        <div className="block">
+          <div className="flex">
+            <div className=" text-2xl   p-5 border-violet-700 border-4 border text-center">
+              <h2>Connected Repo : 1</h2>
+            </div>
+            <div className=" text-2xl p-5 border-4 border text-center ml-5">
+              <h2>No of Blogs Added : {allData.noOfBlogs}</h2>
+              <h3></h3>
+            </div>
           </div>
           <div className=" text-2xl p-5 border-4 border text-center ml-5">
-            <h2>No of Blogs Added : {allData.noOfBlogs}</h2>
-            <h3></h3>
+            <h2>Blogs Name :- </h2>
+            {allData.allBlogArray.map((val, key) => {
+              return (
+                <h3 key={key}>{val}</h3>
+              )
+            })}
           </div>
-        </div>
-        <div className=" text-2xl p-5 border-4 border text-center ml-5 d-block bg-cyan-500 ">
-          <h2>Blogs Name :- </h2>
-          {allData.allBlogArray.map((val, key) => {
-            return (
-              <h3 key={key}>{val}</h3>
-            )
-          })}
         </div>
       </>
     )
