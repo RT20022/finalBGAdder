@@ -54,7 +54,7 @@ export default async function PAGE() {
               <h3></h3>
             </div>
           </div>
-          <div className=" text-2xl p-5 border-4 border text-center ml-5">
+          <div className=" text-2xl p-5 border-4 border text-center ml-5 mt-4">
             <h2>Blogs Name :- </h2>
             {allData.allBlogArray.map((val, key) => {
               return (
