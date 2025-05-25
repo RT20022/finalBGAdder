@@ -33,6 +33,7 @@ async function Getrepos() {
         if (resp.ok) {
             let result = await resp.json()
             let reposResp = await fetch(result.repos_url)
+            console.log(reposResp , "all Repos")
             if (reposResp.ok) {
                 let repos = await reposResp.json()
                 return repos
